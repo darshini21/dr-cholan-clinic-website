@@ -2,47 +2,82 @@
 window.CLINIC = {
   whatsapp: "919360401654",
 
-  /* Per-doctor booking. Days: 0 = Sunday … 6 = Saturday. Times in minutes from midnight.
-     Source: clinic signboard. TODO: confirm with the clinic. */
+  /* Per-service booking.
+     schedule: one entry per weekday (0 = Sunday … 6 = Saturday), each a list of
+     [from, to] sessions in minutes from midnight. slot = minutes per booking slot.
+     onRequest: weekdays bookable "by appointment only" (no fixed slots; the clinic fixes the time). */
   doctors: {
     ortho: {
       name: "Dr. C. Srinivasacholan",
       short: "Dr. Srinivasacholan",
-      days: [1, 2, 3, 4, 5], from: 17 * 60, to: 22 * 60, slot: 15,
+      img: "img/doc-s-portrait.webp",
+      // Mon–Fri 6–10 pm; Saturday by appointment only
+      schedule: [[], [[18 * 60, 22 * 60]], [[18 * 60, 22 * 60]], [[18 * 60, 22 * 60]], [[18 * 60, 22 * 60]], [[18 * 60, 22 * 60]], []],
+      onRequest: [6],
+      slot: 15,
       fee: "General consultation ₹400, pay at the clinic",
-      purposes: ["Bones & joints consultation", "Follow-up visit", "Physiotherapy session", "Bone density camp", "Second opinion"]
+      purposes: ["Bones & joints consultation", "Follow-up visit", "Bone density camp", "Second opinion"]
     },
     derma: {
       name: "Dr. G.P. Rekha Cholan",
       short: "Dr. Rekha Cholan",
-      days: [1, 2, 3, 4, 5], from: 18 * 60, to: 20 * 60, slot: 15,
+      img: "img/doc-r-portrait.webp",
+      // Mon–Fri 6–9 pm; Mon, Wed & Sat also 10 am–1 pm
+      schedule: [
+        [],                                        // Sun
+        [[10 * 60, 13 * 60], [18 * 60, 21 * 60]],  // Mon
+        [[18 * 60, 21 * 60]],                      // Tue
+        [[10 * 60, 13 * 60], [18 * 60, 21 * 60]],  // Wed
+        [[18 * 60, 21 * 60]],                      // Thu
+        [[18 * 60, 21 * 60]],                      // Fri
+        [[10 * 60, 13 * 60]]                       // Sat
+      ],
+      slot: 15,
       fee: "Pay at the clinic",
-      purposes: ["Skin & hair consultation", "Follow-up visit", "Cosmetic procedure", "Child's skin problem"]
+      purposes: ["Skin & hair consultation", "Laser treatment", "Follow-up visit", "Cosmetic procedure", "Child's skin problem"]
+    },
+    physio: {
+      name: "Advanced Physiotherapy & Pain Relief",
+      short: "Physiotherapy",
+      label: "Service",
+      img: "img/physio-band.webp",
+      // Mon–Fri 10 am–4 pm & 6:30–9 pm; Sat 10 am–4 pm
+      schedule: [
+        [],                                              // Sun
+        [[10 * 60, 16 * 60], [18 * 60 + 30, 21 * 60]],  // Mon
+        [[10 * 60, 16 * 60], [18 * 60 + 30, 21 * 60]],  // Tue
+        [[10 * 60, 16 * 60], [18 * 60 + 30, 21 * 60]],  // Wed
+        [[10 * 60, 16 * 60], [18 * 60 + 30, 21 * 60]],  // Thu
+        [[10 * 60, 16 * 60], [18 * 60 + 30, 21 * 60]],  // Fri
+        [[10 * 60, 16 * 60]]                             // Sat
+      ],
+      slot: 30,
+      fee: "Senior physiotherapist consultation, pay at the clinic",
+      purposes: ["Physiotherapy session", "Pain relief consultation", "Post-surgery rehab", "Sports injury rehab", "Follow-up session"]
     }
   },
 
-  /* Opening hours by day (0 = Sunday … 6 = Saturday), minutes from midnight.
-     Source: clinic signboard — Ortho Mon–Fri 5–10 pm, Derma Mon–Fri 6–8 pm.
-     TODO: confirm weekend / morning hours with the clinic. */
+  /* Clinic opening hours by day (0 = Sunday … 6 = Saturday), minutes from midnight.
+     The combined hours of all three services above. */
   hours: [
-    [],                // Sun
-    [[17 * 60, 22 * 60]], // Mon
-    [[17 * 60, 22 * 60]], // Tue
-    [[17 * 60, 22 * 60]], // Wed
-    [[17 * 60, 22 * 60]], // Thu
-    [[17 * 60, 22 * 60]], // Fri
-    []                 // Sat
+    [],                                        // Sun
+    [[10 * 60, 16 * 60], [18 * 60, 22 * 60]],  // Mon
+    [[10 * 60, 16 * 60], [18 * 60, 22 * 60]],  // Tue
+    [[10 * 60, 16 * 60], [18 * 60, 22 * 60]],  // Wed
+    [[10 * 60, 16 * 60], [18 * 60, 22 * 60]],  // Thu
+    [[10 * 60, 16 * 60], [18 * 60, 22 * 60]],  // Fri
+    [[10 * 60, 16 * 60]]                       // Sat
   ],
   hoursTable: [
-    { day: 1, label: "Monday", text: "5 – 10 pm" },
-    { day: 2, label: "Tuesday", text: "5 – 10 pm" },
-    { day: 3, label: "Wednesday", text: "5 – 10 pm" },
-    { day: 4, label: "Thursday", text: "5 – 10 pm" },
-    { day: 5, label: "Friday", text: "5 – 10 pm" },
-    { day: 6, label: "Saturday", text: "Call to confirm" },
-    { day: 0, label: "Sunday", text: "Call to confirm" }
+    { day: 1, label: "Monday", text: "10 am – 4 pm, 6 – 10 pm" },
+    { day: 2, label: "Tuesday", text: "10 am – 4 pm, 6 – 10 pm" },
+    { day: 3, label: "Wednesday", text: "10 am – 4 pm, 6 – 10 pm" },
+    { day: 4, label: "Thursday", text: "10 am – 4 pm, 6 – 10 pm" },
+    { day: 5, label: "Friday", text: "10 am – 4 pm, 6 – 10 pm" },
+    { day: 6, label: "Saturday", text: "10 am – 4 pm" },
+    { day: 0, label: "Sunday", text: "Closed" }
   ],
-  hoursNote: "Orthopaedics 5 – 10 pm · Dermatology 6 – 8 pm",
+  hoursNote: "Ortho: Mon–Fri 6 – 10 pm, Sat by appointment · Derma: Mon–Fri 6 – 9 pm; Mon, Wed & Sat 10 am – 1 pm · Physio: Mon–Fri 10 am – 4 pm & 6:30 – 9 pm; Sat 10 am – 4 pm",
 
   finder: {
     knee:     { dept: "Bones & joints", who: "See Dr. Srinivasacholan, then physiotherapy", title: "Knee pain", text: "Arthritis, a twisted knee or worn cartilage usually improve with medicines, an injection and physiotherapy. Replacement is considered only when the joint is badly worn." },

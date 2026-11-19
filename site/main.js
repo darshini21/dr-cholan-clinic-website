@@ -57,7 +57,7 @@
     $$(".chip[data-k]").forEach(c => c.setAttribute("aria-pressed", c === chip));
     const d = (CLINIC.finder || {})[chip.dataset.k];
     if (!d || !answer) return;
-    answer.innerHTML = `<span class="who">${d.who}</span><b>${d.title}</b><p>${d.text}</p><a href="#book" data-doctor="${d.dept === "Skin & hair" ? "derma" : "ortho"}" data-purpose="${PURPOSE_FOR[d.dept] || "Bones & joints consultation"}">Book this visit</a>`;
+    answer.innerHTML = `<span class="who">${d.who}</span><b>${d.title}</b><p>${d.text}</p><a href="#book" data-doctor="${d.dept === "Skin & hair" ? "derma" : d.dept === "Physiotherapy" ? "physio" : "ortho"}" data-purpose="${PURPOSE_FOR[d.dept] || "Bones & joints consultation"}">Book this visit</a>`;
     if (animate && !reduce && window.gsap) gsap.fromTo(answer.children, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .45, stagger: .04, ease: "power2.out" });
   };
   const chips = $$(".chip[data-k]");
@@ -127,11 +127,19 @@
 
   const slotsFor = (doc, d) => {
     const D = DOCS[doc], out = [];
-    if (!D || !D.days.includes(d.getDay())) return out;
+    const sessions = (D && D.schedule && D.schedule[d.getDay()]) || [];
+    if (!sessions.length) return out;
     const now = istNow(), today = startOfDay(now).getTime() === startOfDay(d).getTime();
     const nowMin = now.getHours() * 60 + now.getMinutes();
-    for (let m = D.from; m + D.slot <= D.to; m += D.slot) out.push({ m, past: today && m <= nowMin + 15 });
+    sessions.forEach(([from, to]) => {
+      for (let m = from; m + D.slot <= to; m += D.slot) out.push({ m, past: today && m <= nowMin + 15 });
+    });
     return out;
+  };
+  // "By appointment only" days: bookable as a request, the clinic fixes the time
+  const onRequest = (doc, d) => {
+    const D = DOCS[doc];
+    return !!(D && D.onRequest && D.onRequest.includes(d.getDay()) && d.getTime() >= startOfDay(istNow()).getTime());
   };
 
   const renderDates = () => {
@@ -139,7 +147,7 @@
     let html = "";
     for (let i = 0; i < WINDOW; i++) {
       const d = new Date(base); d.setDate(base.getDate() + state.offset + i);
-      const avail = slotsFor(state.doc, d).some(s => !s.past);
+      const avail = slotsFor(state.doc, d).some(s => !s.past) || onRequest(state.doc, d);
       const sel = !!state.date && d.getTime() === state.date.getTime();
       const label = d.getTime() === base.getTime() ? "Today" : DAY[d.getDay()];
       html += `<button type="button" role="radio" class="date-chip" data-t="${d.getTime()}" aria-checked="${sel}" ${avail ? "" : "disabled"} aria-label="${d.toDateString()}${avail ? "" : ", not available"}"><span>${label}</span><b>${d.getDate()}</b><small>${avail ? MON[d.getMonth()] : "Closed"}</small></button>`;
@@ -152,6 +160,10 @@
   const groupOf = m => m < 12 * 60 ? "Morning" : m < 16 * 60 ? "Afternoon" : m < 20 * 60 ? "Evening" : "Night";
   const renderSlots = () => {
     if (!state.date) { slotsEl.innerHTML = `<p class="slot-empty">Pick a day to see open times.</p>`; return; }
+    if (onRequest(state.doc, state.date)) {
+      slotsEl.innerHTML = `<p class="slot-empty">${["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"][state.date.getDay()]} are by appointment only. Send the request below and the clinic will fix a time with you on WhatsApp, or call 93604 01654.</p>`;
+      return;
+    }
     const groups = {};
     slotsFor(state.doc, state.date).forEach(s => (groups[groupOf(s.m)] = groups[groupOf(s.m)] || []).push(s));
     const html = Object.keys(groups).map(g => `<div class="slot-group"><p>${g}</p><div class="slot-grid">${
@@ -162,10 +174,11 @@
 
   const renderSummary = () => {
     const D = DOCS[state.doc];
-    const when = state.date && state.time != null
-      ? `${DAY[state.date.getDay()]}, ${state.date.getDate()} ${MON[state.date.getMonth()]} at ${fmtTime(state.time)}`
+    const day = state.date && `${DAY[state.date.getDay()]}, ${state.date.getDate()} ${MON[state.date.getMonth()]}`;
+    const when = state.date && onRequest(state.doc, state.date) ? `${day}, time to be fixed by the clinic`
+      : state.date && state.time != null ? `${day} at ${fmtTime(state.time)}`
       : "Choose a day and time above";
-    summary.innerHTML = `<img src="${state.doc === "derma" ? "img/doc-r-portrait.webp" : "img/doc-s-portrait.webp"}" alt=""><span><b>${D.name}</b><span>${when}</span><small>${D.fee}</small></span>`;
+    summary.innerHTML = `<img src="${D.img}" alt=""><span><b>${D.name}</b><span>${when}</span><small>${D.fee}</small></span>`;
   };
 
   const renderPurposes = keep => {
@@ -224,16 +237,17 @@
       const name = (f.get("name") || "").trim();
       const phone = (f.get("phone") || "").replace(/[\s-]/g, "").replace(/^(\+91|91|0)(?=\d{10}$)/, "");
       const err = $(".err", form);
-      if (!state.date || state.time == null) { err.textContent = "Choose a day and a time slot first."; slotsEl.scrollIntoView({ block: "center" }); return; }
+      const req = !!state.date && onRequest(state.doc, state.date);
+      if (!state.date || (state.time == null && !req)) { err.textContent = "Choose a day and a time slot first."; slotsEl.scrollIntoView({ block: "center" }); return; }
       if (!name) { err.textContent = "Add the patient's name."; $("#f-name").focus(); return; }
       if (!/^[6-9]\d{9}$/.test(phone)) { err.textContent = "Enter a 10-digit mobile number, like 98400 12345."; $("#f-phone").focus(); return; }
       err.textContent = "";
       const D = DOCS[state.doc];
       const lines = [
         "Hello Dr. Cholan's Clinic, I'd like to book an appointment.",
-        `Doctor: ${D.name}`,
+        `${D.label || "Doctor"}: ${D.name}`,
         `Date: ${DAY[state.date.getDay()]}, ${state.date.getDate()} ${MON[state.date.getMonth()]} ${state.date.getFullYear()}`,
-        `Time: ${fmtTime(state.time)}`,
+        `Time: ${req ? "By appointment, please suggest a time" : fmtTime(state.time)}`,
         `Purpose: ${f.get("purpose")}`,
         `Patient: ${name}`,
         `Mobile: ${phone}`,

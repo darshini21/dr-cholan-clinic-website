@@ -438,9 +438,9 @@ main > .sec:last-child { padding-bottom: var(--section); }
 
 /* ---------- Per-doctor booking ---------- */
 .book { grid-template-columns: 1.25fr 1fr; }
-.doc-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.doc-switch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .doc-opt {
-  display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 12px; text-align: left; padding: 12px; cursor: pointer;
   background: var(--canvas); border: 1.5px solid transparent; border-radius: 16px; transition: border-color .15s ease, background .15s ease;
 }
 .doc-opt img { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; object-position: 50% 15%; flex: none; }
@@ -499,6 +499,7 @@ main > .sec:last-child { padding-bottom: var(--section); }
 @media (max-width: 1000px) { .book { grid-template-columns: 1fr; } }
 @media (max-width: 520px) {
   .doc-switch { grid-template-columns: 1fr; }
+  .doc-opt { flex-direction: row; align-items: center; }
   .date-strip { gap: 4px; }
   .date-chip { padding: 8px 0; }
   .date-chip b { font-size: 17px; }
