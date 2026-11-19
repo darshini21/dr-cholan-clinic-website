@@ -17,7 +17,7 @@ Contents: 1. Business and contact | 2. Homepage | 3. About / Our Story | 4. Doct
 | Primary doctor (listed) | DR.C.SRINIVASACHOLAN |
 | Address | 4, 5th cross street, near Canara bank, Krishna nagar, Pallavaram, Pammal, Chennai, Tamil Nadu 600075 |
 | City / Country / PIN | chennai / India / 600075 |
-| Map coordinates | 12.973685, 80.1286101 (Google Maps: http://maps.google.com/maps?q=12.973685,80.1286101) |
+| Map coordinates | 12.9725928, 80.1374419 (Google Maps: http://maps.google.com/maps?q=12.9725928,80.1374419) |
 | Phone (website "call" number) | 08048053370 / +918048053370 / +91-8048053370 (type "VMN" = NowFloats virtual mobile number that forwards to the clinic) |
 | WhatsApp (chat widget) | 919360401654 (wa.me/919360401654) |
 | Appointment number (signboard photo, banner-02) | 93604 01654 (same as WhatsApp number) |
