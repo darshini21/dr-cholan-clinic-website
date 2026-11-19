@@ -18,6 +18,19 @@
     }));
   }
 
+  /* ---------- Gallery dropdown in the menu ---------- */
+  $$(".has-sub").forEach(li => {
+    const btn = $(".sub-btn", li);
+    const setOpen = on => { li.classList.toggle("open", on); btn.setAttribute("aria-expanded", on); };
+    btn.addEventListener("click", e => { e.stopPropagation(); setOpen(!li.classList.contains("open")); });
+    // Desktop: open on hover too
+    li.addEventListener("pointerenter", e => { if (e.pointerType === "mouse" && window.innerWidth > 1040) setOpen(true); });
+    li.addEventListener("pointerleave", e => { if (e.pointerType === "mouse" && window.innerWidth > 1040) setOpen(false); });
+    $$(".sub a", li).forEach(a => a.addEventListener("click", () => setOpen(false)));
+    document.addEventListener("click", e => { if (!li.contains(e.target)) setOpen(false); });
+    li.addEventListener("keydown", e => { if (e.key === "Escape") { setOpen(false); btn.focus(); } });
+  });
+
   /* ---------- Tabs ---------- */
   $$("[role=tablist]").forEach(list => {
     const tabs = $$("[role=tab]", list);
@@ -46,7 +59,7 @@
     // deep links like #care-derma
     $$("[data-open-tab]").forEach(a => a.addEventListener("click", () => {
       const t = document.getElementById(a.dataset.openTab);
-      if (t) select(t);
+      if (t && tabs.includes(t)) select(t);
     }));
   });
 
@@ -256,6 +269,41 @@
       ].filter(Boolean).join("\n");
       window.open(`https://wa.me/${CLINIC.whatsapp}?text=${encodeURIComponent(lines)}`, "_blank", "noopener");
     });
+  }
+
+  /* ---------- Gallery photo viewer ---------- */
+  const lb = $("#lightbox");
+  if (lb && typeof lb.showModal === "function") {
+    const lbImg = $("img", lb), lbCap = $("figcaption", lb);
+    let list = [], at = 0;
+    const show = i => {
+      at = (i + list.length) % list.length;
+      const f = list[at], img = $("img", f);
+      lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt;
+      lbCap.textContent = $("figcaption", f).textContent;
+    };
+    $$(".gallery .g-open").forEach(btn => btn.addEventListener("click", () => {
+      const fig = btn.closest("figure");
+      list = $$("figure", fig.parentElement);
+      show(list.indexOf(fig));
+      lb.showModal();
+      if (window.lenis) window.lenis.stop();
+    }));
+    $(".lb-close", lb).addEventListener("click", () => lb.close());
+    $(".lb-prev", lb).addEventListener("click", () => show(at - 1));
+    $(".lb-next", lb).addEventListener("click", () => show(at + 1));
+    lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });
+    lb.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft") show(at - 1);
+      if (e.key === "ArrowRight") show(at + 1);
+    });
+    let sx = null;
+    lb.addEventListener("pointerdown", e => { sx = e.clientX; });
+    lb.addEventListener("pointerup", e => {
+      if (sx == null) return; const dx = e.clientX - sx; sx = null;
+      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
+    });
+    lb.addEventListener("close", () => { if (window.lenis) window.lenis.start(); });
   }
 
   /* ---------- Photo sliders ---------- */

@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@500&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/hero.webp">
-<link rel="stylesheet" href="styles.css?v=6">
+<link rel="stylesheet" href="styles.css?v=9">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -55,6 +55,16 @@
       <li><a href="#care">Treatments</a></li>
       <li><a href="#doctors">Doctors</a></li>
       <li><a href="#why">Why us</a></li>
+      <li class="has-sub">
+        <button type="button" class="sub-btn" aria-expanded="false" aria-controls="gallery-menu">Gallery <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <ul class="sub" id="gallery-menu">
+          <li><a href="#gallery" data-open-tab="gtab-clinic">Inside the clinic</a></li>
+          <li class="sub-label">Treatments</li>
+          <li><a href="#gallery" data-open-tab="gtab-ortho">Bones &amp; joints <small>Ortho</small></a></li>
+          <li><a href="#gallery" data-open-tab="gtab-derma">Skin &amp; hair <small>Derma</small></a></li>
+          <li><a href="#gallery" data-open-tab="gtab-physio">Physiotherapy <small>Physio</small></a></li>
+        </ul>
+      </li>
       <li><a href="#reviews">Reviews</a></li>
       <li><a href="#visit">Visit</a></li>
     </ul>
@@ -340,23 +350,70 @@
   </section>
 
   <!-- ============ GALLERY ============ -->
-  <section class="sec tight" aria-labelledby="gallery-title">
+  <section class="sec tight" id="gallery" aria-labelledby="gallery-title">
     <div class="wrap">
       <div class="head">
-        <h2 class="t-xl" id="gallery-title" data-split>Inside <span class="soft">the clinic</span></h2>
-        <p class="lede">Real photos from Krishna Nagar, Pammal.</p>
+        <h2 class="t-xl" id="gallery-title" data-split>Our <span class="soft">gallery</span></h2>
+        <p class="lede">Real photos from our clinic in Krishna Nagar, Pammal. Pick a topic, then tap any photo to see it larger.</p>
       </div>
-      <div class="gallery" data-stagger>
-        <figure class="wide tall"><img src="img/gallery-04.webp" alt="Reception desk with the clinic's logo" loading="lazy"></figure>
-        <figure><img src="img/gallery-10.webp" alt="Dr. Srinivasacholan at his desk" loading="lazy"></figure>
-        <figure class="tall"><img src="img/gallery-06.webp" alt="Physiotherapy room with treatment beds" loading="lazy"></figure>
-        <figure><img src="img/gallery-02.webp" alt="Patients in the waiting area" loading="lazy"></figure>
-        <figure class="wide"><img src="img/banner-01.webp" alt="The doctors at the clinic opening" loading="lazy"></figure>
-        <figure><img src="img/gallery-16.webp" alt="Reception and pharmacy" loading="lazy"></figure>
-        <figure><img src="img/gallery-01.webp" alt="A patient receiving physiotherapy" loading="lazy"></figure>
+      <div class="tabs g-tabs" role="tablist" aria-label="Gallery topics">
+        <button class="tab" role="tab" id="gtab-clinic" aria-controls="gpanel-clinic" aria-selected="true">Inside the clinic</button>
+        <button class="tab" role="tab" id="gtab-ortho" aria-controls="gpanel-ortho" aria-selected="false" tabindex="-1">Bones &amp; joints</button>
+        <button class="tab" role="tab" id="gtab-derma" aria-controls="gpanel-derma" aria-selected="false" tabindex="-1">Skin &amp; hair</button>
+        <button class="tab" role="tab" id="gtab-physio" aria-controls="gpanel-physio" aria-selected="false" tabindex="-1">Physiotherapy</button>
+      </div>
+      <div class="g-panel" role="tabpanel" id="gpanel-clinic" aria-labelledby="gtab-clinic">
+        <p class="g-note">Our rooms, from the reception to the laser suite.</p>
+        <div class="gallery">
+          <figure><button type="button" class="g-open" aria-label="View larger: Reception &amp; pharmacy"><img src="img/reception-pharmacy.webp" width="960" height="1280" alt="The reception counter with the clinic's gold logo and the pharmacy shelves behind it" loading="lazy"></button><figcaption>Reception &amp; pharmacy</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Waiting area"><img src="img/waiting-area.webp" width="1280" height="853" alt="Two views of the waiting area, with rows of seats and a green wall that reads Wishing a stronger bone and glowing skin" loading="lazy"></button><figcaption>Waiting area</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Laser suite"><img src="img/laser-suite.webp" width="960" height="1280" alt="The laser suite with Q-switched and other laser machines beside a treatment bed" loading="lazy"></button><figcaption>Laser suite</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Skin treatment room"><img src="img/aesthetic-room.webp" width="960" height="1280" alt="A skin treatment room with a hydrafacial machine, treatment bed and wash basin" loading="lazy"></button><figcaption>Skin treatment room</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: X-ray room"><img src="img/xray-room.webp" width="960" height="1280" alt="The X-ray room with a mobile X-ray machine, lead apron and stand" loading="lazy"></button><figcaption>X-ray room</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Procedure room"><img src="img/procedure-room.webp" width="960" height="1280" alt="A procedure room with a blue treatment bed and skin care machines" loading="lazy"></button><figcaption>Procedure room</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Physiotherapy room"><img src="img/physio-room.webp" width="1448" height="1086" alt="The physiotherapy room with curtained treatment beds and therapy machines" loading="lazy"></button><figcaption>Physiotherapy room</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Health awareness talk"><img src="img/physio-awareness-talk.webp" width="1280" height="720" alt="Patients listening to a physiotherapist during a health awareness talk at the clinic" loading="lazy"></button><figcaption>Health awareness talk</figcaption></figure>
+        </div>
+      </div>
+      <div class="g-panel" role="tabpanel" id="gpanel-ortho" aria-labelledby="gtab-ortho" hidden>
+        <p class="g-note">Orthopaedic care with Dr. C. Srinivasacholan, with X-ray and bone density scans on site.</p>
+        <div class="gallery">
+          <figure><button type="button" class="g-open" aria-label="View larger: Explaining a knee problem"><img src="img/doc-s-consult.webp" alt="Dr. Srinivasacholan explains a knee joint model to an older couple" loading="lazy"></button><figcaption>Explaining a knee problem</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: X-ray on site"><img src="img/xray-room.webp" width="960" height="1280" alt="The X-ray room with a mobile X-ray machine, lead apron and stand" loading="lazy"></button><figcaption>X-ray on site</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Bone density scan"><img src="img/physio-bone-scan.webp" width="1280" height="720" alt="A patient's heel being scanned on a bone density machine" loading="lazy"></button><figcaption>Bone density scan</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Talking a family through the plan"><img src="img/gallery-17.webp" alt="Dr. Srinivasacholan explaining a diagnosis to a patient and her family" loading="lazy"></button><figcaption>Talking a family through the plan</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Dr. Srinivasacholan"><img src="img/gallery-10.webp" alt="Dr. Srinivasacholan at his desk" loading="lazy"></button><figcaption>Dr. Srinivasacholan</figcaption></figure>
+        </div>
+      </div>
+      <div class="g-panel" role="tabpanel" id="gpanel-derma" aria-labelledby="gtab-derma" hidden>
+        <p class="g-note">Skin, hair and laser care with Dr. G.P. Rekha Cholan.</p>
+        <div class="gallery">
+          <figure><button type="button" class="g-open" aria-label="View larger: Close skin check"><img src="img/doc-r-consult.webp" alt="Dr. Rekha Cholan examines a patient's skin with a dermatoscope" loading="lazy"></button><figcaption>Close skin check</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Laser suite"><img src="img/laser-suite.webp" width="960" height="1280" alt="The laser suite with Q-switched and other laser machines beside a treatment bed" loading="lazy"></button><figcaption>Laser suite</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Hydrafacial &amp; facials"><img src="img/aesthetic-room.webp" width="960" height="1280" alt="A skin treatment room with a hydrafacial machine, treatment bed and wash basin" loading="lazy"></button><figcaption>Hydrafacial &amp; facials</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Procedure room"><img src="img/procedure-room.webp" width="960" height="1280" alt="A procedure room with a blue treatment bed and skin care machines" loading="lazy"></button><figcaption>Procedure room</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Aesthetic treatments we offer"><img src="img/aesthetic-treatments-poster.webp" width="960" height="1280" alt="Clinic poster for aesthetic treatments: skin rejuvenation, anti-ageing care, pigmentation solutions, laser treatments and glowing skin" loading="lazy"></button><figcaption>Aesthetic treatments we offer</figcaption></figure>
+        </div>
+      </div>
+      <div class="g-panel" role="tabpanel" id="gpanel-physio" aria-labelledby="gtab-physio" hidden>
+        <p class="g-note">Our physiotherapy and pain relief centre.</p>
+        <div class="gallery">
+          <figure><button type="button" class="g-open" aria-label="View larger: Physiotherapy room"><img src="img/physio-room.webp" width="1448" height="1086" alt="The physiotherapy room with curtained treatment beds and therapy machines" loading="lazy"></button><figcaption>Physiotherapy room</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Treatment beds"><img src="img/gallery-06.webp" alt="Physiotherapy room with treatment beds" loading="lazy"></button><figcaption>Treatment beds</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: A therapy session"><img src="img/gallery-01.webp" alt="A patient receiving physiotherapy" loading="lazy"></button><figcaption>A therapy session</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Exercise charts for home practice"><img src="img/gallery-07.webp" alt="The clinic's physiotherapy room with exercise charts and treatment beds" loading="lazy"></button><figcaption>Exercise charts for home practice</figcaption></figure>
+          <figure><button type="button" class="g-open" aria-label="View larger: Health awareness talk"><img src="img/physio-awareness-talk.webp" width="1280" height="720" alt="Patients listening to a physiotherapist during a health awareness talk at the clinic" loading="lazy"></button><figcaption>Health awareness talk</figcaption></figure>
+        </div>
       </div>
     </div>
   </section>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+    <figure><img src="" alt=""><figcaption></figcaption></figure>
+    <button type="button" class="lb-close" aria-label="Close">&times;</button>
+    <button type="button" class="lb-prev" aria-label="Previous photo">&#8249;</button>
+    <button type="button" class="lb-next" aria-label="Next photo">&#8250;</button>
+  </dialog>
 
   <!-- ============ FAQ ============ -->
   <section class="sec" aria-labelledby="faq-title">
@@ -488,6 +545,7 @@
           <ul>
             <li><a href="#doctors">Our doctors</a></li>
             <li><a href="#why">Why us</a></li>
+            <li><a href="#gallery" data-open-tab="gtab-clinic">Gallery</a></li>
             <li><a href="#reviews">Reviews</a></li>
             <li><a href="#visit">Hours &amp; location</a></li>
           </ul>
@@ -520,6 +578,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="main.js?v=5"></script>
+<script src="main.js?v=6"></script>
 </body>
 </html>
