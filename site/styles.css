@@ -268,6 +268,13 @@ main > .sec:last-child { padding-bottom: var(--section); }
 .why-card { display: flex; flex-direction: column; background: var(--surface); border-radius: var(--r-xl); overflow: hidden; }
 .why-card .img { aspect-ratio: 16 / 9; background: var(--soft); overflow: hidden; }
 .why-card .img img { width: 100%; height: 100%; object-fit: cover; }
+/* Photo slider (swipe or tap the dots; auto-advances) */
+.slider { position: relative; touch-action: pan-y; }
+.slider-track { display: flex; height: 100%; transition: transform .7s cubic-bezier(.2,.7,.2,1); will-change: transform; }
+.slider-track img { flex: 0 0 100%; user-select: none; -webkit-user-drag: none; }
+.slider-dots { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); display: flex; gap: 6px; padding: 6px 8px; border-radius: 999px; background: rgba(0,0,0,.28); backdrop-filter: blur(4px); }
+.slider-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: rgba(255,255,255,.55); cursor: pointer; transition: width .2s ease, background .2s ease; }
+.slider-dots button[aria-selected="true"] { width: 20px; background: #fff; }
 .why-card .txt { padding: 24px 26px 28px; }
 .why-card p { margin: 10px 0 0; }
 @media (max-width: 760px) { .why-list { grid-template-columns: 1fr; } .why-card .txt { padding: 20px; } }

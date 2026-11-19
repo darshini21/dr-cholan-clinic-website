@@ -258,6 +258,37 @@
     });
   }
 
+  /* ---------- Photo sliders ---------- */
+  $$("[data-slider]").forEach(slider => {
+    const track = $(".slider-track", slider);
+    const dots = $$(".slider-dots button", slider);
+    const count = track.children.length;
+    let idx = 0, timer = null, x0 = null;
+    const go = i => {
+      idx = (i + count) % count;
+      track.style.transform = `translateX(${-idx * 100}%)`;
+      dots.forEach((d, j) => d.setAttribute("aria-selected", j === idx));
+    };
+    const start = () => { if (!reduce && !timer) timer = setInterval(() => go(idx + 1), 4000); };
+    const stop = () => { clearInterval(timer); timer = null; };
+    dots.forEach((d, i) => d.addEventListener("click", () => { stop(); go(i); start(); }));
+    // Swipe left/right on touch screens (and drag with a mouse)
+    slider.addEventListener("pointerdown", e => { x0 = e.clientX; stop(); });
+    slider.addEventListener("pointerup", e => {
+      if (x0 == null) return;
+      const dx = e.clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1));
+      start();
+    });
+    slider.addEventListener("pointercancel", () => { x0 = null; start(); });
+    slider.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") stop(); });
+    slider.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") start(); });
+    // Only auto-advance while the slider is on screen
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop())).observe(slider);
+    } else start();
+  });
+
   /* ---------- Year ---------- */
   $$("[data-year]").forEach(el => el.textContent = new Date().getFullYear());
 
