@@ -85,6 +85,21 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; letter-spacing: -0.035em; color: v
 .announce a { color: #fff; text-underline-offset: 3px; text-decoration-color: rgba(255,255,255,.5); }
 .announce a:hover { text-decoration-color: #fff; }
 .announce-short { display: none; }
+/* Scrolling offers */
+.announce.ticker { display: block; padding: 0; overflow: hidden; position: relative; cursor: default; }
+.announce.ticker::before, .announce.ticker::after { content: ""; position: absolute; top: 0; bottom: 0; width: 40px; z-index: 1; pointer-events: none; }
+.announce.ticker::before { left: 0; background: linear-gradient(to right, var(--ink), transparent); }
+.announce.ticker::after { right: 0; background: linear-gradient(to left, var(--ink), transparent); }
+.offers-track { display: flex; width: max-content; animation: offers-scroll var(--offers-time, 30s) linear infinite; }
+.announce.ticker:hover .offers-track, .announce.ticker:focus-within .offers-track, .announce.ticker.paused .offers-track { animation-play-state: paused; }
+.offer { display: inline-flex; align-items: center; gap: 10px; padding: 9px 0 9px 22px; }
+.offer-tag { padding: 2px 9px; border-radius: 999px; background: var(--violet); color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .02em; }
+.offer a { font-weight: 800; }
+.offer-dot { font-style: normal; color: rgba(255,255,255,.45); margin-left: 12px; }
+@keyframes offers-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .announce.ticker { overflow-x: auto; }
+}
 @media (max-width: 600px) {
   .announce { font-size: 13px; }
   .announce-long { display: none; }

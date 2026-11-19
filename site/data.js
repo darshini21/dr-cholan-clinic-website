@@ -2,6 +2,31 @@
 window.CLINIC = {
   whatsapp: "919360401654",
 
+  /* ===== SPECIAL OFFERS (scrolling strip at the very top of the site) =====
+     To add an offer: copy one { ... } block, paste it, and change the words.
+     To remove an offer: delete its { ... } block.
+     To hide the strip completely: leave the list empty, like this:  offers: [],
+       tag    – short label shown in a pill (optional)
+       text   – the offer itself
+       button – words on the button (optional)
+       link   – where the button goes: "whatsapp" opens WhatsApp with the offer
+                pre-typed, "#book" goes to booking, "#camp" to the bone camp,
+                or paste any web address (optional) */
+  offers: [
+    {
+      tag: "Skin offer",
+      text: "Care subscription for your skin! 15% off on two or more purchases of your daily routines! Grab & care for your skin!",
+      button: "Ask on WhatsApp",
+      link: "whatsapp"
+    },
+    {
+      tag: "Free camp",
+      text: "Free bone density check for adults over 50 at our camp.",
+      button: "Reserve a slot",
+      link: "#camp"
+    }
+  ],
+
   /* Per-service booking.
      schedule: one entry per weekday (0 = Sunday … 6 = Saturday), each a list of
      [from, to] sessions in minutes from midnight. slot = minutes per booking slot.
@@ -104,6 +129,37 @@ window.CLINIC = {
 (() => {
   const C = window.CLINIC;
   const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  /* Special offers strip */
+  const bar = document.getElementById("offers");
+  const offers = (C.offers || []).filter(o => o && o.text);
+  if (bar && !offers.length) bar.hidden = true;
+  if (bar && offers.length) {
+    const href = o => o.link === "whatsapp"
+      ? `https://wa.me/${C.whatsapp}?text=${encodeURIComponent("Hello Dr. Cholan's Clinic, I'd like to know more about this offer: " + o.text)}`
+      : o.link;
+    const item = (o, hidden) => {
+      const h = o.button && o.link ? href(o) : "";
+      const ext = /^https?:/.test(h) ? ' target="_blank" rel="noopener"' : "";
+      const tab = hidden ? ' tabindex="-1"' : "";
+      return `<span class="offer"${hidden ? ' aria-hidden="true"' : ""}>` +
+        (o.tag ? `<b class="offer-tag">${esc(o.tag)}</b>` : "") +
+        `<span>${esc(o.text)}</span>` +
+        (h ? `<a href="${esc(h)}"${ext}${tab}>${esc(o.button)}</a>` : "") +
+        `<i class="offer-dot" aria-hidden="true">✦</i></span>`;
+    };
+    bar.classList.add("ticker");
+    bar.innerHTML = `<div class="offers-track">${offers.map(o => item(o, false)).join("")}</div>`;
+    const track = bar.firstElementChild;
+    // Repeat the offers until one copy is wider than the screen, then double it so the loop is seamless
+    const one = offers.map(o => item(o, true)).join("");
+    let guard = 0;
+    while (track.scrollWidth < window.innerWidth * 1.1 && guard++ < 8) track.insertAdjacentHTML("beforeend", one);
+    track.insertAdjacentHTML("beforeend", track.innerHTML.replace(/<span class="offer">/g, '<span class="offer" aria-hidden="true">').replace(/<a href=/g, '<a tabindex="-1" href='));
+    track.style.setProperty("--offers-time", Math.max(18, Math.round(track.scrollWidth / 2 / 70)) + "s");
+    // Tap to pause on phones
+    bar.addEventListener("click", e => { if (!e.target.closest("a")) bar.classList.toggle("paused"); });
+  }
 
   const track = document.getElementById("reviews-track");
   if (track) {
