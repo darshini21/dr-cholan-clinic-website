@@ -434,6 +434,9 @@ main > .sec:last-child { padding-bottom: var(--section); }
 .visit-info { padding: 24px clamp(20px, 3vw, 32px) 28px; display: grid; gap: 18px; }
 .visit-info h3 { margin-top: 8px; }
 .addr { margin: 6px 0 0; font-size: 15.5px; }
+.spot-us { margin: 0; }
+.spot-us img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r-md); }
+.spot-us figcaption { margin-top: 8px; font-size: 14px; font-weight: 600; color: var(--ink-2); }
 .status { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14.5px; }
 .status i { width: 8px; height: 8px; border-radius: 50%; background: #1F8F4E; box-shadow: 0 0 0 4px rgba(31,143,78,.16); }
 .status.closed i { background: #B4232A; box-shadow: 0 0 0 4px rgba(180,35,42,.14); }
