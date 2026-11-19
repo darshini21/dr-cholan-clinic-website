@@ -34,7 +34,7 @@ window.CLINIC = {
       ],
       slot: 15,
       fee: "Pay at the clinic",
-      purposes: ["Skin & hair consultation", "Laser treatment", "Follow-up visit", "Cosmetic procedure", "Child's skin problem"]
+      purposes: ["Skin & hair consultation", "Laser treatment", "Follow-up visit", "Aesthetic procedure", "Child's skin problem"]
     },
     physio: {
       name: "Advanced Physiotherapy & Pain Relief",
