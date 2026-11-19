@@ -351,6 +351,7 @@ main > .sec:last-child { padding-bottom: var(--section); }
 /* ---------- Gallery ---------- */
 /* Masonry: every photo keeps its own shape, columns fill without gaps */
 .gallery { columns: 3 240px; column-gap: 10px; }
+.gallery:has(> figure:nth-child(2):last-child) { columns: 2 240px; } /* only two photos: two columns, no empty gap */
 .gallery figure { position: relative; margin: 0 0 10px; border-radius: var(--r-md); overflow: hidden; background: var(--soft); break-inside: avoid; }
 .gallery .g-open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
 .gallery img { display: block; width: 100%; height: auto; transition: transform .6s ease; }
