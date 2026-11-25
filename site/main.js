@@ -274,13 +274,21 @@
   /* ---------- Gallery photo viewer ---------- */
   const lb = $("#lightbox");
   if (lb && typeof lb.showModal === "function") {
-    const lbImg = $("img", lb), lbCap = $("figcaption", lb);
+    const lbImg = $("img", lb), lbVid = $("video", lb), lbCap = $("figcaption", lb);
     let list = [], at = 0;
     const show = i => {
       at = (i + list.length) % list.length;
-      const f = list[at], img = $("img", f);
-      lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt;
+      const f = list[at];
       lbCap.textContent = $("figcaption", f).textContent;
+      if (f.dataset.video) {
+        // Videos play in the viewer with sound and controls
+        lbImg.hidden = true; lbVid.hidden = false;
+        lbVid.src = f.dataset.video; lbVid.play().catch(() => {});
+      } else {
+        lbVid.pause(); lbVid.removeAttribute("src"); lbVid.load(); lbVid.hidden = true; lbImg.hidden = false;
+        const img = $("img", f);
+        lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt;
+      }
     };
     $$(".gallery .g-open").forEach(btn => btn.addEventListener("click", () => {
       const fig = btn.closest("figure");
@@ -298,12 +306,12 @@
       if (e.key === "ArrowRight") show(at + 1);
     });
     let sx = null;
-    lb.addEventListener("pointerdown", e => { sx = e.clientX; });
+    lb.addEventListener("pointerdown", e => { sx = e.target.closest("video") ? null : e.clientX; });
     lb.addEventListener("pointerup", e => {
       if (sx == null) return; const dx = e.clientX - sx; sx = null;
       if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
     });
-    lb.addEventListener("close", () => { if (window.lenis) window.lenis.start(); });
+    lb.addEventListener("close", () => { lbVid.pause(); if (window.lenis) window.lenis.start(); });
   }
 
   /* ---------- Photo sliders ---------- */

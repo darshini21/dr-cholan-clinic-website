@@ -371,6 +371,9 @@ main > .sec:last-child { padding-bottom: var(--section); }
 .gallery .g-open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
 .gallery img { display: block; width: 100%; height: auto; transition: transform .6s ease; }
 .gallery figure:hover img { transform: scale(1.03); }
+.gallery video { display: block; width: 100%; height: auto; pointer-events: none; }
+.g-play { position: absolute; left: 50%; top: 50%; width: 58px; height: 58px; margin: -29px 0 0 -29px; border-radius: 999px; background: rgba(10,8,30,.55); backdrop-filter: blur(4px); }
+.g-play::after { content: ""; position: absolute; left: 23px; top: 18px; border-style: solid; border-width: 11px 0 11px 17px; border-color: transparent transparent transparent #fff; }
 .gallery figcaption {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 14px 12px; pointer-events: none;
   color: #fff; font-size: 14.5px; font-weight: 700; line-height: 1.25;
@@ -392,6 +395,8 @@ main > .sec:last-child { padding-bottom: var(--section); }
 .lightbox::backdrop { background: rgba(8,6,20,.6); }
 .lightbox figure { margin: 0; display: grid; gap: 12px; justify-items: center; padding: 56px 64px 24px; max-width: 100%; }
 .lightbox img { max-width: min(1100px, 100%); max-height: calc(100vh - 140px); width: auto; height: auto; object-fit: contain; border-radius: 12px; }
+.lightbox [hidden] { display: none !important; }
+.lightbox video { max-width: min(1100px, 100%); max-height: calc(100vh - 140px); border-radius: 12px; background: #000; }
 .lightbox figcaption { font-size: 16px; font-weight: 700; text-align: center; }
 .lightbox button { position: absolute; border: 0; background: rgba(255,255,255,.14); color: #fff; width: 48px; height: 48px; border-radius: 999px; font-size: 30px; line-height: 1; cursor: pointer; display: grid; place-items: center; }
 .lightbox button:hover { background: rgba(255,255,255,.26); }
